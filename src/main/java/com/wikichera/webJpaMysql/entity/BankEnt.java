@@ -1,15 +1,12 @@
 package com.wikichera.webJpaMysql.entity;
 
-import lombok.*;
-import org.springframework.data.annotation.Id;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Table;
+import lombok.*;
+
+import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 
 @Getter
@@ -17,27 +14,33 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "BANK")
 @Entity
+@Table(name = "BANK")
 public class BankEnt {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "BANK_ID")
-    private Long bankID;
+    private Long bankId;
     @Column(name = "NAME")
     private String name;
     @Column(name = "IS_INTERNATIONAL")
     private boolean international;
+    //    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "LAST_UPDATE_DATE")
     private Date lastUpdatedDate;
     @Column(name = "LAST_UPDATE_BY")
     private String lastUpdatedBy;
-    @Column(name="CREATED_DATE")
+    //    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "CREATED_DATE")
     private Date createdDate;
-    @Column(name="CREATED_BY")
+    @Column(name = "CREATED_BY")
     private String createdBy;
-    @Column(name="CONTACTS")
-    private Map<String, String> contacts = new HashMap<String, String>();
-
-
+    @ElementCollection
+    @CollectionTable(name = "BANK_CONTACT", joinColumns = @JoinColumn(name = "BANK_ID"))
+    @Column(name = "NAME")
+    private List<String> contacts = new ArrayList<>();
+    @Embedded
+    Address address = new Address();
 }
+
+
